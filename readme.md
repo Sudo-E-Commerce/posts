@@ -1,8 +1,16 @@
-# Hướng dẫn sử dụng Sudo Post #
+## Hướng dẫn sử dụng Sudo Post ##
 
-## Cài đặt để sử dụng ##
+**Giới thiệu:** Đây là package dùng để quản lý bài viết của SudoCms.
 
-## Cấu hình tại Menu ##
+Mặc định package sẽ tạo ra giao diện quản lý cho toàn bộ bài viết và danh mục bài viết được đặt tại `/{admin_dir}/posts` và `/{admin_dir}/post_categories`, trong đó admin_dir là đường dẫn admin được đặt tại `config('app.admin_dir')`
+
+### Cài đặt để sử dụng ###
+
+- Package cần phải có base `sudo/core` để có thể hoạt động không gây ra lỗi
+- Để có thể sử dụng Package cần require theo lệnh `composer require sudo/post`
+- Chạy `php artisan migrate` để tạo các bảng phục vụ cho package
+
+### Cấu hình tại Menu ###
 
 	[
     	'type' 				=> 'multiple',
@@ -28,8 +36,11 @@
 			]
 		]
     ],
+ 
+- Vị trí cấu hình được đặt tại `config/SudoMenu.php`
+- Để có thể hiển thị tại menu, chúng ta có thể đặt đoạn cấu hình trên tại `config('SudoMenu.menu')`
 
-## Cấu hình tại Module ##
+### Cấu hình tại Module ###
 	
 	'posts' => [
 		'name' 			=> 'Bài viết',
@@ -52,6 +63,6 @@
 		],
 	],
 
-## Publish ##
-
-## Sử dụng ##
+- Vị trí cấu hình được đặt tại `config/SudoModule.php`
+- Để có thể phân quyền, chúng ta có thể đặt đoạn cấu hình trên tại `config('SudoModule.modules')`
+ 
