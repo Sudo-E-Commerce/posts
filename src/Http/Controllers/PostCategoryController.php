@@ -183,9 +183,11 @@ class PostCategoryController extends AdminController
         $this->models->whereIn('id', $child_record_array_id)->update([
             'parent_id' => $record->parent_id ?? null,
         ]);
+        // Ghi logs
+        systemLogs('quick_delete', ['status' => -1], $this->table_name, $id);
         // Cập nhật bản ghi hiện tại  không thuộc cha và có trạng thái xóa [-1]
         $this->models->where('id', $id)->update([
-            'parent_id' => null,
+            'parent_id' => 0,
             'status'    => -1,
         ]);
         // Trả về
