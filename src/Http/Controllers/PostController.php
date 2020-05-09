@@ -57,7 +57,7 @@ class PostController extends AdminController
         $form = new Form;
         $form->text('name', '', 1, 'Tiêu đề');
         $form->slug('slug', '', 1, 'Đường dẫn');
-        $form->multiSelect('category_id', [], 1, 'Danh mục', $categories->data(), 'Chọn nhiều danh mục');
+        $form->multiCheckbox('category_id', [], 1, 'Danh mục', $categories->data(), 'Chọn nhiều danh mục');
         $form->image('image', '', 0, 'Ảnh đại diện');
         $form->editor('detail', '', 0, 'Nội dung');
         $form->tags('tags', [], 0, 'Tags', 'Điền tên tags và nhấn Thêm');
@@ -133,7 +133,7 @@ class PostController extends AdminController
         $form = new Form;
         $form->text('name', $data_edit->name, 1, 'Tiêu đề');
         $form->slug('slug', $data_edit->slug, 1, 'Đường dẫn', '', 'false');
-        $form->multiSelect('category_id', $post_category_maps, 0, 'Danh mục', $categories->data(), 'Chọn nhiều danh mục');
+        $form->multiCheckbox('category_id', $post_category_maps, 1, 'Danh mục', $categories->data(), 'Chọn nhiều danh mục');
         $form->image('image', $data_edit->image, 0, 'Ảnh đại diện');
         $form->editor('detail', $data_edit->detail, 0, 'Nội dung');
         // Tags
