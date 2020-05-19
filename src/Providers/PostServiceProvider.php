@@ -85,14 +85,21 @@ class PostServiceProvider extends ServiceProvider
     public function publish()
     {
         if ($this->app->runningInConsole()) {
-            // Chạy riêng post
-            $this->publishes([
+            $assets = [
                 //
-            ], 'sudo/post');
+            ];
+            $config = [
+                //
+            ];
+            $all = array_merge($assets, $config);
+            // Chạy riêng
+            $this->publishes($all, 'sudo/post');
+            $this->publishes($assets, 'sudo/post/assets');
+            $this->publishes($config, 'sudo/post/config');
             // Khởi chạy chung theo core
-            $this->publishes([
-                //
-            ], 'sudo/core');
+            $this->publishes($all, 'sudo/core');
+            $this->publishes($assets, 'sudo/core/assets');
+            $this->publishes($config, 'sudo/core/config');
         }
     }
 
