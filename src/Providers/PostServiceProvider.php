@@ -11,7 +11,7 @@ class PostServiceProvider extends ServiceProvider
      * alias => path
      */
     private $configFile = [
-        
+        //
     ];
 
     /**
@@ -85,9 +85,14 @@ class PostServiceProvider extends ServiceProvider
     public function publish()
     {
         if ($this->app->runningInConsole()) {
+            // Chạy riêng post
             $this->publishes([
-                
-            ], 'sudo/page');
+                //
+            ], 'sudo/post');
+            // Khởi chạy chung theo core
+            $this->publishes([
+                //
+            ], 'sudo/core');
         }
     }
 

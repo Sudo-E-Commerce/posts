@@ -129,7 +129,9 @@ class PostCategoryController extends AdminController
         $form->image('image', $data_edit->image, 0, 'Ảnh đại diện');
         $form->editor('detail', $data_edit->detail, 0, 'Nội dung');
         $form->checkbox('status', $data_edit->status, 1, 'Trạng thái');
-        $form->action('edit');
+        // lấy link xem
+        $link = (config('app.post_category_models')) ? config('app.post_category_models')::where('id', $id)->first()->getUrl() : '';
+        $form->action('edit', $link);
         // Hiển thị form tại view
         return $form->render('edit', compact('id'));
     }

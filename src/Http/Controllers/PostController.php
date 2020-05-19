@@ -141,7 +141,9 @@ class PostController extends AdminController
         $form->tags('tags', $tags, 0, 'Tags', 'Điền tên tags và nhấn Thêm');
 
         $form->checkbox('status', $data_edit->status, 1, 'Trạng thái');
-        $form->action('edit');
+        // lấy link xem
+        $link = (config('app.post_models')) ? config('app.post_models')::where('id', $id)->first()->getUrl() : '';
+        $form->action('edit', $link);
         // Hiển thị form tại view
         return $form->render('edit', compact('id'));
     }
