@@ -62,7 +62,7 @@ class PostSeedCommand extends Command {
 
         // Bài viết
         $stt = 0;
-        for ($j=0; $j < 10; $j++) { 
+        for ($j=0; $j < 50; $j++) { 
             $posts = [];
             $seos = [];
             $lang_metas = [];
