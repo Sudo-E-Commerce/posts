@@ -64,7 +64,7 @@ class PostController extends AdminController
             $form->multiCheckbox('category_id', [], 1, 'Danh mục', $categories->data(), 'Chọn nhiều danh mục');
             $form->editor('detail', '', 0, 'Nội dung');
         $form->endCard();
-        $form->card('col-lg-3');
+        $form->card('col-lg-3', '');
             $form->action('add');
             $form->radio('status', 1, 'Trạng thái', config('app.status'));
             $form->image('image', '', 0, 'Ảnh đại diện');
@@ -146,7 +146,7 @@ class PostController extends AdminController
             $form->multiCheckbox('category_id', $post_category_maps, 1, 'Danh mục', $categories->data(), 'Chọn nhiều danh mục');
             $form->editor('detail', $data_edit->detail, 0, 'Nội dung');
         $form->endCard();
-        $form->card('col-lg-3');
+        $form->card('col-lg-3', '');
             // lấy link xem
             $link = (config('app.post_models')) ? config('app.post_models')::where('id', $id)->first()->getUrl() : '';
             $form->action('edit', $link);

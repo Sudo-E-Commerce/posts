@@ -64,7 +64,7 @@ class PostCategoryController extends AdminController
             $form->select('parent_id', '', 0, 'Danh mục cha', $categories->data_select(), 0);
             $form->editor('detail', '', 0, 'Nội dung');
         $form->endCard();
-        $form->card('col-lg-3');
+        $form->card('col-lg-3', '');
             $form->action('add');
             $form->radio('status', 1, 'Trạng thái', config('app.status'));
             $form->image('image', '', 0, 'Ảnh đại diện');
@@ -136,7 +136,7 @@ class PostCategoryController extends AdminController
             $form->select('parent_id', $data_edit->parent_id, 0, 'Danh mục cha', $categories->data_select(), 0, [ $data_edit->id ]);
             $form->editor('detail', $data_edit->detail, 0, 'Nội dung');
         $form->endCard();
-        $form->card('col-lg-3');
+        $form->card('col-lg-3', '');
             // lấy link xem
             $link = (config('app.post_category_models')) ? config('app.post_category_models')::where('id', $id)->first()->getUrl() : '';
             $form->action('edit', $link);
