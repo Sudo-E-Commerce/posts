@@ -30,8 +30,8 @@ class PostCategoryController extends AdminController
         $listdata->search('created_at', 'Ngày tạo', 'range');
         $listdata->search('status', 'Trạng thái', 'array', config('app.status'));
         // Build các button hành động
-        $listdata->btnAction('status', 1, __('Table::table.active'), 'primary', 'fas fa-edit');
-        $listdata->btnAction('status', 0, __('Table::table.no_active'), 'warning', 'fas fa-edit');
+        $listdata->btnAction('status', 1, __('Table::table.active'), 'success', 'fas fa-edit');
+        $listdata->btnAction('status', 0, __('Table::table.no_active'), 'info', 'fas fa-window-close');
         $listdata->btnAction('delete_custom', -1, __('Table::table.trash'), 'danger', 'fas fa-trash');
         // Build bảng
         $listdata->add('image', 'Ảnh', 0);
@@ -57,15 +57,21 @@ class PostCategoryController extends AdminController
         $categories = new ListCategory('post_categories', $this->has_locale, Request()->lang_locale ?? \App::getLocale());
         // Khởi tạo form
         $form = new Form;
-        $form->text('name', '', 1, 'Tiêu đề');
-        $form->slug('slug', '', 1, 'Đường dẫn');
-        $form->select('parent_id', '', 0, 'Danh mục cha', $categories->data_select(), 0);
-        $form->image('image', '', 0, 'Ảnh đại diện');
-        $form->editor('detail', '', 0, 'Nội dung');
-        $form->checkbox('status', 1, 1, 'Trạng thái');
-        $form->action('edit');
+        $form->card('col-lg-9');
+            $form->lang($this->table_name);
+            $form->text('name', '', 1, 'Tiêu đề');
+            $form->slug('slug', '', 1, 'Đường dẫn');
+            $form->select('parent_id', '', 0, 'Danh mục cha', $categories->data_select(), 0);
+            $form->editor('detail', '', 0, 'Nội dung');
+        $form->endCard();
+        $form->card('col-lg-3');
+            $form->action('add');
+            $form->radio('status', 1, 'Trạng thái', config('app.status'));
+            $form->image('image', '', 0, 'Ảnh đại diện');
+        $form->endCard();
         // Hiển thị form tại view
-        return $form->render('create');
+        $form->hasFullForm();
+        return $form->render('create_multi_col');
     }
 
     /**
@@ -123,17 +129,23 @@ class PostCategoryController extends AdminController
         $categories = new ListCategory('post_categories', $this->has_locale, $language_meta->lang_locale ?? null);
         // Khởi tạo form
         $form = new Form;
-        $form->text('name', $data_edit->name, 1, 'Tiêu đề');
-        $form->slug('slug', $data_edit->slug, 1, 'Đường dẫn', '', 'false');
-        $form->select('parent_id', $data_edit->parent_id, 0, 'Danh mục cha', $categories->data_select(), 0, [ $data_edit->id ]);
-        $form->image('image', $data_edit->image, 0, 'Ảnh đại diện');
-        $form->editor('detail', $data_edit->detail, 0, 'Nội dung');
-        $form->checkbox('status', $data_edit->status, 1, 'Trạng thái');
-        // lấy link xem
-        $link = (config('app.post_category_models')) ? config('app.post_category_models')::where('id', $id)->first()->getUrl() : '';
-        $form->action('edit', $link);
+
+        $form->card('col-lg-9');
+            $form->text('name', $data_edit->name, 1, 'Tiêu đề');
+            $form->slug('slug', $data_edit->slug, 1, 'Đường dẫn', '', 'false');
+            $form->select('parent_id', $data_edit->parent_id, 0, 'Danh mục cha', $categories->data_select(), 0, [ $data_edit->id ]);
+            $form->editor('detail', $data_edit->detail, 0, 'Nội dung');
+        $form->endCard();
+        $form->card('col-lg-3');
+            // lấy link xem
+            $link = (config('app.post_category_models')) ? config('app.post_category_models')::where('id', $id)->first()->getUrl() : '';
+            $form->action('edit', $link);
+            $form->radio('status', $data_edit->status, 'Trạng thái', config('app.status'));
+            $form->image('image', $data_edit->image, 0, 'Ảnh đại diện');
+        $form->endCard();
         // Hiển thị form tại view
-        return $form->render('edit', compact('id'));
+        $form->hasFullForm();
+        return $form->render('edit_multi_col', compact('id'));
     }
 
     /**

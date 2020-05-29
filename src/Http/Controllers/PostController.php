@@ -27,10 +27,12 @@ class PostController extends AdminController
         $listdata = new ListData($requests, $this->models, 'Post::posts.table', $this->has_locale);
         // Build Form tìm kiếm
         $listdata->search('name', 'Tên', 'string');
+        $listdata->search('created_at', 'Ngày tạo', 'range');
+        $listdata->search('updated_at', 'Ngày cập nhật', 'range');
         $listdata->search('status', 'Trạng thái', 'array', config('app.status'));
         // Build các button hành động
-        $listdata->btnAction('status', 1, __('Table::table.active'), 'primary', 'fas fa-edit');
-        $listdata->btnAction('status', 0, __('Table::table.no_active'), 'warning', 'fas fa-edit');
+        $listdata->btnAction('status', 1, __('Table::table.active'), 'success', 'fas fa-edit');
+        $listdata->btnAction('status', 0, __('Table::table.no_active'), 'info', 'fas fa-window-close');
         $listdata->btnAction('delete', -1, __('Table::table.trash'), 'danger', 'fas fa-trash');
         // Build bảng
         $listdata->add('image', 'Ảnh', 0);
@@ -55,16 +57,22 @@ class PostController extends AdminController
         $categories = new ListCategory('post_categories', $this->has_locale, Request()->lang_locale ?? \App::getLocale());
         // Khởi tạo form
         $form = new Form;
-        $form->text('name', '', 1, 'Tiêu đề');
-        $form->slug('slug', '', 1, 'Đường dẫn');
-        $form->multiCheckbox('category_id', [], 1, 'Danh mục', $categories->data(), 'Chọn nhiều danh mục');
-        $form->image('image', '', 0, 'Ảnh đại diện');
-        $form->editor('detail', '', 0, 'Nội dung');
-        $form->tags('tags', [], 0, 'Tags', 'Điền tên tags và nhấn Thêm');
-        $form->checkbox('status', 1, 1, 'Trạng thái');
-        $form->action('add');
+        $form->card('col-lg-9');
+            $form->lang($this->table_name);
+            $form->text('name', '', 1, 'Tiêu đề');
+            $form->slug('slug', '', 1, 'Đường dẫn');
+            $form->multiCheckbox('category_id', [], 1, 'Danh mục', $categories->data(), 'Chọn nhiều danh mục');
+            $form->editor('detail', '', 0, 'Nội dung');
+        $form->endCard();
+        $form->card('col-lg-3');
+            $form->action('add');
+            $form->radio('status', 1, 'Trạng thái', config('app.status'));
+            $form->image('image', '', 0, 'Ảnh đại diện');
+            $form->tags('tags', [], 0, 'Tags', 'Điền tên tags và nhấn Thêm');
+        $form->endCard();
         // Hiển thị form tại view
-        return $form->render('create');
+        $form->hasFullForm();
+        return $form->render('create_multi_col');
     }
 
     /**
@@ -131,21 +139,27 @@ class PostController extends AdminController
         $categories = new ListCategory('post_categories', $this->has_locale, $language_meta->lang_locale ?? null);
         // Khởi tạo form
         $form = new Form;
-        $form->text('name', $data_edit->name, 1, 'Tiêu đề');
-        $form->slug('slug', $data_edit->slug, 1, 'Đường dẫn', '', 'false');
-        $form->multiCheckbox('category_id', $post_category_maps, 1, 'Danh mục', $categories->data(), 'Chọn nhiều danh mục');
-        $form->image('image', $data_edit->image, 0, 'Ảnh đại diện');
-        $form->editor('detail', $data_edit->detail, 0, 'Nội dung');
-        // Tags
-        $tags = getTagList($this->table_name, $id)->pluck('name')->toArray();
-        $form->tags('tags', $tags, 0, 'Tags', 'Điền tên tags và nhấn Thêm');
 
-        $form->checkbox('status', $data_edit->status, 1, 'Trạng thái');
-        // lấy link xem
-        $link = (config('app.post_models')) ? config('app.post_models')::where('id', $id)->first()->getUrl() : '';
-        $form->action('edit', $link);
+        $form->card('col-lg-9');
+            $form->text('name', $data_edit->name, 1, 'Tiêu đề');
+            $form->slug('slug', $data_edit->slug, 1, 'Đường dẫn', '', 'false');
+            $form->multiCheckbox('category_id', $post_category_maps, 1, 'Danh mục', $categories->data(), 'Chọn nhiều danh mục');
+            $form->editor('detail', $data_edit->detail, 0, 'Nội dung');
+        $form->endCard();
+        $form->card('col-lg-3');
+            // lấy link xem
+            $link = (config('app.post_models')) ? config('app.post_models')::where('id', $id)->first()->getUrl() : '';
+            $form->action('edit', $link);
+            $form->radio('status', $data_edit->status, 'Trạng thái', config('app.status'));
+            $form->image('image', $data_edit->image, 0, 'Ảnh đại diện');
+            // Tags
+            $tags = getTagList($this->table_name, $id)->pluck('name')->toArray();
+            $form->tags('tags', $tags, 0, 'Tags', 'Điền tên tags và nhấn Thêm');
+        $form->endCard();
         // Hiển thị form tại view
-        return $form->render('edit', compact('id'));
+        $form->hasFullForm();
+        // Hiển thị form tại view
+        return $form->render('edit_multi_col', compact('id'));
     }
 
     /**
