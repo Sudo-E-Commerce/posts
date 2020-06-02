@@ -28,7 +28,6 @@ class PostController extends AdminController
         // Build Form tìm kiếm
         $listdata->search('name', 'Tên', 'string');
         $listdata->search('created_at', 'Ngày tạo', 'range');
-        $listdata->search('updated_at', 'Ngày cập nhật', 'range');
         $listdata->search('status', 'Trạng thái', 'array', config('app.status'));
         // Build các button hành động
         $listdata->btnAction('status', 1, __('Table::table.active'), 'success', 'fas fa-edit');
@@ -61,14 +60,15 @@ class PostController extends AdminController
             $form->lang($this->table_name);
             $form->text('name', '', 1, 'Tiêu đề');
             $form->slug('slug', '', 1, 'Đường dẫn');
-            $form->multiCheckbox('category_id', [], 1, 'Danh mục', $categories->data(), 'Chọn nhiều danh mục');
             $form->editor('detail', '', 0, 'Nội dung');
+            $form->tags('tags', [], 0, 'Tags', 'Điền tên tags và nhấn Thêm');
         $form->endCard();
         $form->card('col-lg-3', '');
             $form->action('add');
             $form->radio('status', 1, 'Trạng thái', config('app.status'));
+            $form->datetimepicker('created_at', date('Y-m-d H:i:s'), 0, 'Thời gian đăng bài');
+            $form->multiCheckbox('category_id', [], 1, 'Danh mục', $categories->data(), 'Chọn nhiều danh mục');
             $form->image('image', '', 0, 'Ảnh đại diện');
-            $form->tags('tags', [], 0, 'Tags', 'Điền tên tags và nhấn Thêm');
         $form->endCard();
         // Hiển thị form tại view
         $form->hasFullForm();
@@ -93,9 +93,9 @@ class PostController extends AdminController
         // Đưa mảng về các biến có tên là các key của mảng
         extract($requests->all(), EXTR_OVERWRITE);
         // Chuẩn hóa lại dữ liệu
-
+        $created_at = $created_at ?? date('Y-m-d H:i:s');
         // Thêm vào DB
-        $created_at = $updated_at = date('Y-m-d H:i:s');
+        $updated_at = date('Y-m-d H:i:s');
         $compact = compact('name','slug','image','detail','status','created_at','updated_at');
         $id = $this->models->createRecord($requests, $compact, $this->has_seo, $this->has_locale);
         // Cập nhật tags
@@ -143,18 +143,19 @@ class PostController extends AdminController
         $form->card('col-lg-9');
             $form->text('name', $data_edit->name, 1, 'Tiêu đề');
             $form->slug('slug', $data_edit->slug, 1, 'Đường dẫn', '', 'false');
-            $form->multiCheckbox('category_id', $post_category_maps, 1, 'Danh mục', $categories->data(), 'Chọn nhiều danh mục');
             $form->editor('detail', $data_edit->detail, 0, 'Nội dung');
+            // Tags
+            $tags = getTagList($this->table_name, $id)->pluck('name')->toArray();
+            $form->tags('tags', $tags, 0, 'Tags', 'Điền tên tags và nhấn Thêm');
         $form->endCard();
         $form->card('col-lg-3', '');
             // lấy link xem
             $link = (config('app.post_models')) ? config('app.post_models')::where('id', $id)->first()->getUrl() : '';
             $form->action('edit', $link);
             $form->radio('status', $data_edit->status, 'Trạng thái', config('app.status'));
+            $form->datetimepicker('created_at', $data_edit->created_at, 0, 'Thời gian đăng bài');
+            $form->multiCheckbox('category_id', $post_category_maps, 1, 'Danh mục', $categories->data(), 'Chọn nhiều danh mục');
             $form->image('image', $data_edit->image, 0, 'Ảnh đại diện');
-            // Tags
-            $tags = getTagList($this->table_name, $id)->pluck('name')->toArray();
-            $form->tags('tags', $tags, 0, 'Tags', 'Điền tên tags và nhấn Thêm');
         $form->endCard();
         // Hiển thị form tại view
         $form->hasFullForm();
@@ -182,9 +183,10 @@ class PostController extends AdminController
         // Đưa mảng về các biến có tên là các key của mảng
         extract($requests->all(), EXTR_OVERWRITE);
         // Chuẩn hóa lại dữ liệu
+        $created_at = $created_at ?? date('Y-m-d H:i:s');
         // Các giá trị thay đổi
-        $created_at = $updated_at = date('Y-m-d H:i:s');
-        $compact = compact('name','slug','image','detail','status','updated_at');
+        $updated_at = date('Y-m-d H:i:s');
+        $compact = compact('name', 'slug', 'image', 'detail', 'status', 'created_at', 'updated_at');
         // Cập nhật tại database
         $this->models->updateRecord($requests, $id, $compact, $this->has_seo);
         // Cập nhật tags

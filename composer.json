@@ -10,7 +10,9 @@
             "email": "hieunvph04479@gmail.com"
         }
     ],
-    "require": {},
+    "require": {
+        "sudo/tag": "dev-master"
+    },
     "autoload": {
         "psr-4": {
             "Sudo\\Post\\": "src/"
