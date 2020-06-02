@@ -62,7 +62,7 @@ class PostSeedCommand extends Command {
 
         // Bài viết
         $stt = 0;
-        for ($j=0; $j < 50; $j++) { 
+        for ($j=0; $j < 1; $j++) { 
             $posts = [];
             $seos = [];
             $lang_metas = [];
@@ -99,7 +99,7 @@ class PostSeedCommand extends Command {
 
         // maps
         $stt = 0;
-        for ($j=0; $j < 10; $j++) { 
+        for ($j=0; $j < 1; $j++) { 
             $post_category_maps = [];
             for ($i=0; $i < 1000; $i++) {
                 $stt++;
