@@ -17,6 +17,10 @@ class PostController extends AdminController
         $this->has_seo = true;
         $this->has_locale = true;
         parent::__construct();
+
+        $post_categories = new ListCategory('post_categories');
+        $this->post_categories = $post_categories->data();
+        \View::share('post_categories', $this->post_categories);
     }
     /**
      * Display a listing of the resource.
@@ -25,8 +29,10 @@ class PostController extends AdminController
      */
     public function index(Request $requests) {
         $listdata = new ListData($requests, $this->models, 'Post::posts.table', $this->has_locale);
+
         // Build Form tìm kiếm
         $listdata->search('name', 'Tên', 'string');
+        $listdata->search('category_id', 'Danh mục', 'array', $this->post_categories);
         $listdata->search('created_at', 'Ngày tạo', 'range');
         $listdata->search('status', 'Trạng thái', 'array', config('app.status'));
         // Build các button hành động
@@ -36,13 +42,20 @@ class PostController extends AdminController
         // Build bảng
         $listdata->add('image', 'Ảnh', 0);
         $listdata->add('name', 'Tên', 1);
+        $listdata->add('category_id', 'Danh mục', 0);
         $listdata->add('', 'Thời gian', 0, 'time');
         $listdata->add('status', 'Trạng thái', 1, 'status');
         $listdata->add('', 'Language', 0, 'lang');
         $listdata->add('', 'Sửa', 0, 'edit');
         $listdata->add('', 'Xóa', 0, 'delete');
-
-        return $listdata->render();
+        // Lấy dữ liệu data
+        $data = $listdata->data();
+        $show_data = $data['show_data'];
+        $show_data_array_id = $show_data->pluck('id')->toArray();
+        // Từ dữ liệu data ở trên lấy ra toàn bộ danh mục thuộc các bài viết
+        $post_category_maps = \Sudo\Post\Models\PostCategoryMap::whereIn('post_id', $show_data_array_id)->get();
+        // Trả về views
+        return $listdata->render(compact('data', 'post_category_maps'));
     }
 
     /**

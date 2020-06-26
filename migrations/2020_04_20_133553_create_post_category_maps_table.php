@@ -16,6 +16,9 @@ class CreatePostCategoryMapsTable extends Migration
         Schema::create('post_category_maps', function (Blueprint $table) {
             $table->integer('post_id');
             $table->integer('post_category_id');
+            // Đánh index cho tên bảng, ngôn ngữ, và và chuỗi ngẫu nhiên
+            $table->index([ 'post_id' ]);
+            $table->index([ 'post_category_id' ]);
         });
     }
 
