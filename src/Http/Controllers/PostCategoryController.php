@@ -91,6 +91,11 @@ class PostCategoryController extends AdminController
         // Đưa mảng về các biến có tên là các key của mảng
         extract($requests->all(), EXTR_OVERWRITE);
         // Chuẩn hóa lại dữ liệu
+        if (isset($parent_id) && !empty($parent_id)) {
+            $parent_id = $parent_id;
+        } else {
+            $parent_id = 0;
+        }
         // Thêm vào DB
         $created_at = $updated_at = date('Y-m-d H:i:s');
         $compact = compact('parent_id','name','slug','image','detail','status','created_at','updated_at');
@@ -167,6 +172,11 @@ class PostCategoryController extends AdminController
         // Đưa mảng về các biến có tên là các key của mảng
         extract($requests->all(), EXTR_OVERWRITE);
         // Chuẩn hóa lại dữ liệu
+        if (isset($parent_id) && !empty($parent_id)) {
+            $parent_id = $parent_id;
+        } else {
+            $parent_id = 0;
+        }
         // Các giá trị thay đổi
         $created_at = $updated_at = date('Y-m-d H:i:s');
         $compact = compact('parent_id','name','slug','image','detail','status','updated_at');
