@@ -43,6 +43,7 @@ class PostController extends AdminController
         $listdata->add('image', 'Ảnh', 0);
         $listdata->add('name', 'Tên', 1);
         $listdata->add('category_id', 'Danh mục', 0);
+        $listdata->add('home', 'Ghim trang chủ', 1, 'pin');
         $listdata->add('', 'Thời gian', 0, 'time');
         $listdata->add('status', 'Trạng thái', 1, 'status');
         $listdata->add('', 'Language', 0, 'lang');
