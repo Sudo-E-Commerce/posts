@@ -11,7 +11,7 @@
         }
     ],
     "require": {
-        "sudo/tag": "dev-master"
+        "sudo/tag": "^1.0"
     },
     "autoload": {
         "psr-4": {
