@@ -113,9 +113,7 @@ class PostController extends AdminController
         $compact = compact('name','slug','image','detail','status','created_at','updated_at');
         $id = $this->models->createRecord($requests, $compact, $this->has_seo, $this->has_locale);
         // Cập nhật tags
-        if (isset($tags) && !empty($tags)) {
-            tags($tags, $this->table_name, $id);
-        }
+        tags($tags ?? [], $this->table_name, $id);
         // Cập nhật danh mục
         $this->categoryHandle($requests, $id);
         // Điều hướng
@@ -204,9 +202,7 @@ class PostController extends AdminController
         // Cập nhật tại database
         $this->models->updateRecord($requests, $id, $compact, $this->has_seo);
         // Cập nhật tags
-        if (isset($tags) && !empty($tags)) {
-            tags($tags, $this->table_name, $id);
-        }
+        tags($tags ?? [], $this->table_name, $id);
         // Cập nhật danh mục
         $this->categoryHandle($requests, $id);
         // Điều hướng
