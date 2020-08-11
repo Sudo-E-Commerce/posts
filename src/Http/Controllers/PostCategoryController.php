@@ -138,7 +138,7 @@ class PostCategoryController extends AdminController
         $form->card('col-lg-9');
             $form->text('name', $data_edit->name, 1, 'Tiêu đề');
             $form->slug('slug', $data_edit->slug, 1, 'Đường dẫn', '', 'false');
-            $form->select('parent_id', $data_edit->parent_id, 0, 'Danh mục cha', $categories->data_select(), 0, [ $data_edit->id ]);
+            $form->select('parent_id', $data_edit->parent_id, 0, 'Danh mục cha', $categories->data_select(), 0, $data_edit->getChildIds());
             $form->editor('detail', $data_edit->detail, 0, 'Nội dung');
         $form->endCard();
         $form->card('col-lg-3', '');
