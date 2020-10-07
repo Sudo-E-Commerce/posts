@@ -103,7 +103,7 @@ class PostCategoryController extends AdminController
         // Điều hướng
         return redirect(route('admin.'.$this->table_name.'.'.$redirect, $id))->with([
             'type' => 'success',
-            'message' => __('Core::admin.create_success')
+            'message' => __('Translate::admin.create_success')
         ]);
     }
 
@@ -185,7 +185,7 @@ class PostCategoryController extends AdminController
         // Điều hướng
         return redirect(route('admin.'.$this->table_name.'.'.$redirect, $id))->with([
             'type' => 'success',
-            'message' => __('Core::admin.update_success')
+            'message' => __('Translate::admin.update_success')
         ]);
     }
 
@@ -217,7 +217,7 @@ class PostCategoryController extends AdminController
         // Trả về
         return [
             'status' => 1,
-            'message' => __('Core::admin.delete_success')
+            'message' => __('Translate::admin.delete_success')
         ];
     }
 }
